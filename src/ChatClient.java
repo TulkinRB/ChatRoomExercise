@@ -25,6 +25,11 @@ public class ChatClient {
 	}
 	
 	public static String getNickname(Scanner in){
-		return "foobar"; //todo: user input
+		System.out.print("Enter your nickname: ");
+		return in.nextLine();
+	}
+	
+	public static boolean handshake(InputStream in, OutputStream out){
+		return true;
 	}
 }
