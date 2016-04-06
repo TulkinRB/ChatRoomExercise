@@ -1,8 +1,15 @@
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -15,8 +22,9 @@ public class ChatClient {
 		String host = getHost(in);
 		String nickname = getNickname(in);
 		Socket server = new Socket(host, 6655);
-		OutputStream serverOut = server.getOutputStream();
-		InputStream serverIn = server.getInputStream();
+		PrintWriter serverOut = new PrintWriter(server.getOutputStream());
+		BufferedReader serverIn = new BufferedReader(new InputStreamReader(server.getInputStream()));
+		DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		
 	}
 	
@@ -29,7 +37,13 @@ public class ChatClient {
 		return in.nextLine();
 	}
 	
-	public static boolean handshake(InputStream in, OutputStream out){
+	public static boolean handshake(BufferedReader in, PrintWriter out){
+		DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		try {
+			Date serverDate = format.parse(in.readLine());
+		} catch (Exception e) {
+			return false;
+		}
 		return true;
 	}
 }

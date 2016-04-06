@@ -30,7 +30,7 @@ public class ChatServer {
         ) {
             Date now = Date.from(Instant.now());
             DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-            out.write(format.format(now));
+            out.println(format.format(now));
 
         } catch (IOException e) {
 
