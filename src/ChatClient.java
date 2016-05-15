@@ -1,21 +1,16 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
 /**
  * Created by User on 06/04/2016.
  */
-public class ClientMain {
+public class ChatClient {
 	
 	public static void main(String args[]) throws IOException, ParseException {
 		Scanner in = new Scanner(System.in);
@@ -38,11 +33,11 @@ public class ClientMain {
 	
 	public static boolean handshake(BufferedReader in, PrintWriter out){
 		try {
-			Date serverDate = ChatServer.format.parse(in.readLine());
+			Date serverDate = ChatServer.FORMAT.parse(in.readLine());
 			long oldTime = serverDate.getTime();
 			long newTime = oldTime - 1000*60*60*24;
 			Date newDate = new Date(newTime);
-			out.println(ChatServer.format.format(newDate));
+			out.println(ChatServer.FORMAT.format(newDate));
 		} catch (Exception e) {
 			return false;
 		}
