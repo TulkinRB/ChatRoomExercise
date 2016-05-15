@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 /**
- * Created by User on 06/04/2016.
+ * The main client-side program.
  */
 public class ChatClient {
 	
@@ -23,7 +23,7 @@ public class ChatClient {
 	}
 	
 	public static String getHost(Scanner in){
-		return "loopback"; //todo: user input
+		return "127.0.0.1"; //todo: user input
 	}
 	
 	public static String getNickname(Scanner in){
