@@ -15,17 +15,16 @@ import java.util.Scanner;
 /**
  * Created by User on 06/04/2016.
  */
-public class ChatClient {
+public class ClientMain {
 	
-	public static void main(String args[]) throws UnknownHostException, IOException{
+	public static void main(String args[]) throws IOException, ParseException {
 		Scanner in = new Scanner(System.in);
 		String host = getHost(in);
 		String nickname = getNickname(in);
 		Socket server = new Socket(host, 6655);
 		PrintWriter serverOut = new PrintWriter(server.getOutputStream());
 		BufferedReader serverIn = new BufferedReader(new InputStreamReader(server.getInputStream()));
-		DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		
+		handshake(serverIn, serverOut);
 	}
 	
 	public static String getHost(Scanner in){
@@ -38,9 +37,12 @@ public class ChatClient {
 	}
 	
 	public static boolean handshake(BufferedReader in, PrintWriter out){
-		DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		try {
-			Date serverDate = format.parse(in.readLine());
+			Date serverDate = ChatServer.format.parse(in.readLine());
+			long oldTime = serverDate.getTime();
+			long newTime = oldTime - 1000*60*60*24;
+			Date newDate = new Date(newTime);
+			out.println(ChatServer.format.format(newDate));
 		} catch (Exception e) {
 			return false;
 		}
