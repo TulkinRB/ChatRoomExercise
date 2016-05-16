@@ -57,10 +57,23 @@ public class ChatServer {
         Date now = new Date();
         for (ClientData client : clients) {
             long timeDiff = now.getTime() - client.lastCheck.getTime();
+            // Handle client messages and then respond to status
             int status = HandleClientMessages(client);
             if(client.isChecking) {
-                // TODO: 16/05/2016 Add client status check
-
+                if(status == ONLINE_CHECK_CLIENT || status == ONLINE_CHECK_SERVERCLIENT) {
+                    client.isChecking = false;
+                }
+                else if(timeDiff > 1000) {
+                    disconnectClient(client);
+                }
+            }
+            else {
+                if (status == ONLINE_CHECK_SERVER || status == ONLINE_CHECK_SERVERCLIENT) {
+                    client.sendMessage(SERVER_ONLINE_CHECK);
+                }
+                if(timeDiff > 5000) {
+                    client.sendMessage(CLIENT_ONLINE_CHECK);
+                }
             }
         }
     }
@@ -132,5 +145,8 @@ public class ChatServer {
         t.start();
     }
 
-
+    public void disconnectClient(ClientData client) {
+        // TODO: 16/05/2016 Actually disconnect the client
+        removeClient(client);
+    }
 }
