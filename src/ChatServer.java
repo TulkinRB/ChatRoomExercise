@@ -25,6 +25,10 @@ public class ChatServer {
     public static final String HANDSHAKE_BAD = "NEGATIVE";
     public static final String CLIENT_ONLINE_CHECK = "ACK"; // to check if the client is online
     public static final String SERVER_ONLINE_CHECK = "CLACK"; // client uses this to chek if the server is online
+    public static final int ONLINE_CHECK_NONE = 0;
+    public static final int ONLINE_CHECK_SERVER = 1;
+    public static final int ONLINE_CHECK_CLIENT = 2;
+    public static final int ONLINE_CHECK_SERVERCLIENT = 3;
 
     public ChatServer() {
         timeOut = new Timer();
@@ -47,6 +51,38 @@ public class ChatServer {
 
         } catch (IOException e) {
         }
+    }
+
+    public void HandleClients() {
+        Date now = new Date();
+        for (ClientData client : clients) {
+            long timeDiff = now.getTime() - client.lastCheck.getTime();
+            if(client.isChecking) {
+
+            }
+        }
+    }
+
+    /**
+     * Goes through the client's message queue and sends all normal client messages, and handles online check messages and returns the client's status.
+     * @param client
+     * @return The status: ONLINE_CHECK_NONE, ONLINE_CHECK_SERVER, ONLINE_CHECK_CLIENT or ONLINE_CHECK_SERVERCLIENT.
+     */
+    public int HandleClientMessages(ClientData client) {
+        int status = ONLINE_CHECK_NONE;
+        while(client.receiveQueue.isEmpty()) {
+            String clientMessage = client.receiveQueue.pop();
+            if(clientMessage == ChatServer.CLIENT_ONLINE_CHECK) {
+                status += ONLINE_CHECK_CLIENT; // Assuming ONLINE_CHECK_CLIENT + ONLINE_CHECK_SERVER = ONLINE_CHECK_CLIENTSERVER which is the case currently
+            }
+            if(clientMessage == ChatServer.SERVER_ONLINE_CHECK) {
+                status += ONLINE_CHECK_CLIENT;
+            }
+            else {
+                SendMessage(clientMessage, client.ID);
+            }
+        }
+        return status;
     }
 
     /**
