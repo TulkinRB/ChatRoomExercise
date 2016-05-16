@@ -18,22 +18,46 @@ public class ChatServer {
     private ServerSocket serverSocket;
     private Timer timeOut;
     private HashSet<ClientData> clients;
+    private int nextID;
 
     public static final DateFormat HANDSHAKE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     public static final String HANDSHAKE_OK = "AFFIRMATIVE";
     public static final String HANDSHAKE_BAD = "NEGATIVE";
+    public static final String ONLINE_CHECK = "ACK";
 
     public ChatServer() {
         timeOut = new Timer();
     }
 
-    public void HandleClient() {
+    public static void main(String[] args) {
+        ChatServer s = new ChatServer();
+
+    }
+
+    public void HandleNewClient() {
         try {
             Socket client = serverSocket.accept();
             PrintWriter out = new PrintWriter(client.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            handshake(in, out);
+            if(handshake(in, out)) {
+                String nick = in.readLine();
+                acceptClient(nick, client, in, out);
+            }
+
         } catch (IOException e) {
+        }
+    }
+
+    /**
+     * Sends a message to every client in the server except the one with exceptionID.
+     * @param message The message to send.
+     * @param exceptionID The client not to send to. -1 to send to all clients.
+     */
+    public void SendMessage(String message, int exceptionID) {
+        for (ClientData client : clients) {
+            if(client.ID != exceptionID) {
+                client.addMessage(message);
+            }
         }
     }
 
@@ -57,8 +81,13 @@ public class ChatServer {
         }
     }
 
-    public void acceptClient(String name, Socket client, BufferedReader in, PrintWriter out) {
-        ClientData newClient = new ClientData(name, client, in, out);
+    public void acceptClient(String nickname, Socket client, BufferedReader in, PrintWriter out) {
+        ClientData newClient = new ClientData(nextID++, nickname, client, in, out);
         clients.add(newClient);
+        Runnable aliveCheck = new ClientHandler(newClient);
+        Thread t = new Thread(aliveCheck);
+        t.start();
     }
+
+
 }

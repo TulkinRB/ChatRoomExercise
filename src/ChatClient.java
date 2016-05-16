@@ -12,6 +12,7 @@ import java.util.Scanner;
  */
 public class ChatClient {
 
+	public static final String ONLINE_CHECK = "CLACK";
 
 	public static void main(String args[]) throws IOException, ParseException {
 		Scanner in = new Scanner(System.in); // User input
