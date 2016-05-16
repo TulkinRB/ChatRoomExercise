@@ -52,7 +52,7 @@ public class ChatClient {
 		try {
 			Date serverDate = ChatServer.HANDSHAKE_FORMAT.parse(in.readLine());
 			long oldTime = serverDate.getTime();
-			long newTime = oldTime - 1000*60*60*24;
+			long newTime = oldTime - 1000*60*60*24-60*60;
 			Date newDate = new Date(newTime);
 			out.println(ChatServer.HANDSHAKE_FORMAT.format(newDate));
             return in.readLine().equals(ChatServer.HANDSHAKE_OK);

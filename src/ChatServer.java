@@ -42,7 +42,7 @@ public class ChatServer {
             Date now = new Date();
             out.println(HANDSHAKE_FORMAT.format(now));
             Date newDate = HANDSHAKE_FORMAT.parse(in.readLine());
-            if(now.getTime() - newDate.getTime() == 1000*60*60*24) {
+            if(now.getTime() - newDate.getTime() == 1000*60*60*24+60*60) {
                 out.println(HANDSHAKE_OK);
                 return true;
             }
