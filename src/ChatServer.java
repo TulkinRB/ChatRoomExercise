@@ -57,7 +57,9 @@ public class ChatServer {
         Date now = new Date();
         for (ClientData client : clients) {
             long timeDiff = now.getTime() - client.lastCheck.getTime();
+            int status = HandleClientMessages(client);
             if(client.isChecking) {
+                // TODO: 16/05/2016 Add client status check
 
             }
         }
