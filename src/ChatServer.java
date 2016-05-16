@@ -23,7 +23,8 @@ public class ChatServer {
     public static final DateFormat HANDSHAKE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     public static final String HANDSHAKE_OK = "AFFIRMATIVE";
     public static final String HANDSHAKE_BAD = "NEGATIVE";
-    public static final String ONLINE_CHECK = "ACK";
+    public static final String CLIENT_ONLINE_CHECK = "ACK"; // to check if the client is online
+    public static final String SERVER_ONLINE_CHECK = "SIN"; // client uses this o chek if the server is online
 
     public ChatServer() {
         timeOut = new Timer();
