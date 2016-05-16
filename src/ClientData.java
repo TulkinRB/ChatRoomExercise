@@ -16,7 +16,7 @@ public class ClientData {
     public BufferedReader in;
     public int ID;
     public int numOfMessages;
-    public Stack<String> messageQueue;
+    public Stack<String> receiveQueue;
 
     public ClientData(int ID, String nickname, Socket socket) {
         this.nickname = nickname;
@@ -32,7 +32,11 @@ public class ClientData {
         this.ID = ID;
     }
 
-    public void addMessage(String message) {
-        messageQueue.push(message);
+    public void sendMessage(String message) {
+        out.println(message);
+    }
+
+    public void addReceiveMessage(String message) {
+        receiveQueue.push(message);
     }
 }

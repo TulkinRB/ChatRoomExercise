@@ -57,9 +57,13 @@ public class ChatServer {
     public void SendMessage(String message, int exceptionID) {
         for (ClientData client : clients) {
             if(client.ID != exceptionID) {
-                client.addMessage(message);
+                client.sendMessage(message);
             }
         }
+    }
+
+    public void removeClient(ClientData client) {
+        clients.remove(client);
     }
 
     public boolean handshake(BufferedReader in, PrintWriter out) throws IOException {
@@ -85,7 +89,7 @@ public class ChatServer {
     public void acceptClient(String nickname, Socket client, BufferedReader in, PrintWriter out) {
         ClientData newClient = new ClientData(nextID++, nickname, client, in, out);
         clients.add(newClient);
-        Runnable aliveCheck = new ClientHandler(newClient);
+        Runnable aliveCheck = new ClientHandler(newClient, this);
         Thread t = new Thread(aliveCheck);
         t.start();
     }
