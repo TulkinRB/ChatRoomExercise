@@ -24,7 +24,7 @@ public class ChatServer {
     public static final String HANDSHAKE_OK = "AFFIRMATIVE";
     public static final String HANDSHAKE_BAD = "NEGATIVE";
     public static final String CLIENT_ONLINE_CHECK = "ACK"; // to check if the client is online
-    public static final String SERVER_ONLINE_CHECK = "SIN"; // client uses this o chek if the server is online
+    public static final String SERVER_ONLINE_CHECK = "CLACK"; // client uses this to chek if the server is online
 
     public ChatServer() {
         timeOut = new Timer();
