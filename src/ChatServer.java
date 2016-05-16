@@ -21,6 +21,7 @@ public class ChatServer {
     private int nextID;
 
     public static final DateFormat HANDSHAKE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    public static final DateFormat SEND_FORMAT = new SimpleDateFormat("HH:mm:ss");
     public static final String HANDSHAKE_OK = "AFFIRMATIVE";
     public static final String HANDSHAKE_BAD = "NEGATIVE";
     public static final String CLIENT_ONLINE_CHECK = "ACK"; // to check if the client is online
@@ -94,22 +95,22 @@ public class ChatServer {
                 status += ONLINE_CHECK_CLIENT;
             }
             else {
-                SendMessage(clientMessage, client.ID);
+                SendMessage(clientMessage, client);
             }
         }
         return status;
     }
 
     /**
-     * Sends a message to every client in the server except the one with exceptionID.
+     * Sends a chat message to every client in the server.
      * @param message The message to send.
-     * @param exceptionID The client not to send to. -1 to send to all clients.
+     * @param sender The client that sent the message.
      */
-    public void SendMessage(String message, int exceptionID) {
+    public void SendMessage(String message, ClientData sender) {
+        Date now = new Date();
+        String formattedMessage = String.format("%s-%d (%s, #%d): %s", sender.nickname, sender.ID, SEND_FORMAT.format(now), sender.numOfMessages, message);
         for (ClientData client : clients) {
-            if(client.ID != exceptionID) {
-                client.sendMessage(message);
-            }
+            client.sendMessage(formattedMessage);
         }
     }
 
